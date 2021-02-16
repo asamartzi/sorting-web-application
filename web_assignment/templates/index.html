@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>With Logic</title> 
+  </head>
+ 
+  <body style="overflow: scroll;">
+    <section style="overflow: scroll;">
+
+        <!-- Display the error message in case the user provides less that 2 words. -->
+        <p id="message" style="text-align: center; white-space: pre-wrap;"> </p>
+
+      <div>
+        <br><br><h1>Submit your List</h1>
+
+        <form method="POST" id="sampleForm">
+          <label for="textarea">You can enter your List here:</label><br><br>
+          <textarea id="textarea" name="textarea" rows="5" cols="50" required></textarea><br><br>
+          <button type="submit" id="SubmitButton">Submit your List</button><br><br><br>
+        </form>
+
+
+          
+          <div id="results" style="width: 40%; margin: auto; background-color: #555555; color: white; text-align: center; border-radius: 16px; font-family: Rubik, Arial; display: none;">
+            <h3>This is your sorted List of Words.</h3><br>
+            <p></p>
+          </div>
+
+      </div>
+    </section>
+
+
+    <script>
+
+
+      //Add a click event handler to the button.
+      $(document).ready(function(event){
+            
+            //Add a click event handler to the button.
+            $('#SubmitButton').on('click', function(event){
+
+                //Emptying the list so that we don't display previous words that the user submitted.
+                $('#results').empty();
+                //Emptying the messages so that previous messages are not displayed again when the user submits new words.
+                $('#message').empty();
+
+
+                //Retrieve the words the user provided from the textarea and save them to a variable called words.
+                var words = $('#textarea').val();
+                words = words.replace(/\s+/g,' ').trim();
+
+                //The user provides the words as one string, so we split it and create an array of strings to send back.
+                var list_of_words = words.split(" ");
+
+                //Disable our button
+                $('#SubmitButton').attr("disabled", true);
+
+                //Change the name of the button to Loading, while waiting for the results to come back.
+                $('#SubmitButton').html("Waiting for Results");
+                
+                //Turn my list to a JSON object.
+                //var j_list = {list_of_words: list_of_words};
+                json_list = JSON.stringify(list_of_words);
+
+                //Send the request through AJAX.
+                $.ajax({
+                    //The URL that we are sending an Ajax request to.
+                    url: '/api/sort',
+                    data: json_list,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    contentType: 'application/json',
+
+                    //The Ajax request was a success, so it will return the sorted list as a JSON object.
+                    success: function(json_list){
+                        
+                        //Show the hidden div.
+                        $("#results").show();
+                      
+                        //Display the sorted list in HTML Div one by one.
+                        for (var i = 0; i < json_list.length; i++){
+                            $('#results').append('<p>' + json_list[i] + '</p>');
+                        };
+            
+                    },
+                    error: function(error){
+                        //The Ajax request was a failure, so we will display error message.
+                        $('#message').html(error.responseText);
+
+
+                    },
+                    complete: function(){
+                        //Ajax request is finished, so we enable the button again and return it's name back to Submit Your List.        
+                        $('#SubmitButton').attr("disabled", false);
+                        $('#SubmitButton').html("Submit your List");
+                    }
+                });
+            });
+        });
+
+    </script>
+
+  </body>
+</html>

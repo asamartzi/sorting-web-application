@@ -1,0 +1,48 @@
+body {
+    background-color: rgb(57, 169, 219);
+    font-family: Rubik, Arial;
+    background-attachment: scroll;
+    max-width: 200%;
+}
+
+section {
+    width: 80%;
+    margin: 3% auto;
+    height: 95vh;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 40px;
+    background-attachment: scroll;
+    max-width: 160%;
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+    line-height: 30px;
+    height: 80%;
+    overflow: auto;
+}
+
+
+textarea {
+    width: 40%;
+    border: 2px solid #555555;
+    border-radius: 8px;
+    height: 150px;
+    font-family: Rubik, Arial;
+}
+
+button {
+    background-color: #555555;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+
