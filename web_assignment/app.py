@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, flash, url_for, jsonify
 from quicksort import quicksort
 import json
+import os
 
 app = Flask(__name__)
-app.secret_key = "mysecretkey"
+key = "my_secret_key"
+app.secret_key = os.getenv(key, default="default_secret_key")
 
 @app.route("/", )
 def home():
@@ -29,15 +31,9 @@ def sort_the_words():
 
         #Call the quicksort method on the final_lst in order to sort it.
         quicksort(final_lst, 0, len(final_lst) - 1)
-
-        #Check that the list is indeed correctly sorted by printing it in the terminal.
-        print(final_lst)
-        print("Your list is : ")
-        for l in final_lst:
-            print(l)
         
         #Turn the sorted list in a JSON list and return it. 
-        json_list = json.dumps(final_lst)
+        json_list = jsonify(final_lst)
 
         return json_list
 
